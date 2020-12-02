@@ -1,4 +1,5 @@
 bin
 lib
 include
+day-*/part[12]
 .*.swp

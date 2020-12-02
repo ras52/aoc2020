@@ -5,5 +5,9 @@
 
 PATH = ../bin
 
-aoc1:	aoc1.c
+all: part1 part2
+
+part1:	part1.c
+	cc -o $@ $^
+part2:	part2.c
 	cc -o $@ $^
