@@ -4,8 +4,9 @@
 
 #define ERROR(MSG) (fputs(MSG, stderr), exit(1))
 
-int line(buffer) 
+void line(buffer, valid1, valid2) 
     char *buffer;
+    int *valid1, *valid2;
 {
     int a, b, n = 0;
     char c, pass[BUFSZ], *p = pass;
@@ -14,18 +15,20 @@ int line(buffer)
         ERROR("Unable to parse password line\n");
 
     while (*p) if (*p++ == c) ++n;
-    return n >= a && n <= b;
+    *valid1 += n >= a && n <= b;
+    *valid2 += pass[a-1] == c ^ pass[b-1] == c;
 }
 
 int main() {
     char linebuf[BUFSZ];
-    int valid = 0;
+    int valid1 = 0, valid2 = 0;
     FILE *fp = fopen("input.txt", "r");
     if (!fp) ERROR("Unable to load input.txt\n");
 
     while (fgets(linebuf, BUFSZ-1, fp))
-        valid += line(linebuf);
+        line(linebuf, &valid1, &valid2);
     fclose(fp);
 
-    printf("Found %d valid passwords\n", valid);
+    printf("Found %d valid passwords per policy 1\n", valid1);
+    printf("Found %d valid passwords per policy 2\n", valid2);
 }
