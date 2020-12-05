@@ -19,6 +19,13 @@ int main() {
     }
     fclose(fp);
 
+    for (i=0; i<n; ++i) { 
+        if (vals[i] > TOTAL/2) continue;
+        for (j=0; j<n; ++j)
+            if (i != j && vals[i] + vals[j] == TOTAL)
+                printf("%d * %d = %d\n", vals[i], vals[j], vals[i]*vals[j]);
+    }
+
     for (i=0; i<n; ++i) {
         if (vals[i] > TOTAL/3) continue;
         rest = TOTAL - vals[i];
@@ -30,5 +37,6 @@ int main() {
                            vals[i] * vals[j] * vals[k]);
         }
     }
+
     return 0;
 }
