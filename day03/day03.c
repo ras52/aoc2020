@@ -5,8 +5,25 @@
 
 #define ERROR(MSG) (fputs(MSG, stderr), exit(1))
 
+unsigned slope(lines, n, dx, dy) 
+    char **lines;
+{
+    unsigned x = 0, y = 0, len, trees = 0;
+    char *line;
+    while ( y < n ) {
+       line = lines[y];
+       len = strlen(line) - 1;
+       trees += line[x % len] == '#';
+       x += dx;
+       y += dy;
+    }
+
+    printf("Slope %d,%d hits %d trees\n", dx, dy, trees);
+    return trees;
+}
+
 int main() {
-    int n = 0, x = 0, y = 0, len, trees = 0;
+    unsigned n = 0, prod = 1;
     char *lines[MAX_LINES], *line;
     FILE *fp = fopen("input.txt", "r");
     if (!fp) ERROR("Unable to load input.txt\n");
@@ -18,15 +35,13 @@ int main() {
         lines[n++] = line;
         if (n == MAX_LINES) ERROR("Too many lines\n");
     }
+    fclose(fp);
 
-    while ( y < n ) {
-       line = lines[y];
-       len = strlen(line) - 1;
-       trees += line[x % len] == '#';
-       x += 3;
-       y++;
-    }
-
-    printf("Read %d lines and %d trees\n", n, trees);
+    prod *= slope(lines, n, 1, 1);
+    prod *= slope(lines, n, 3, 1);
+    prod *= slope(lines, n, 5, 1);
+    prod *= slope(lines, n, 7, 1);
+    prod *= slope(lines, n, 1, 2);
+    printf("Multiplied gives %u\n", prod);
     return 0;
 }
